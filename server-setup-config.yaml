@@ -123,10 +123,29 @@ install:
   # For often there are config which the user wants to change, here is the place to put the local path to configs, jars or whatever
   # You can copy files or folders:
   #
-  #localFiles:
-  #  - from: setup/modpack-download.zip
-  #    to: setup/test/modpack-download-copied.zip
   localFiles:
+    - from: OLD_TO_DELETE/config/minecraft2discord-common.toml
+      to: config/minecraft2discord-common.toml
+    - from: OLD_TO_DELETE/config/dcintegration-common.toml
+      to: config/dcintegration-common.toml
+    - from: OLD_TO_DELETE/ma-essentials/homes
+      to: ma-essentials/homes
+    - from: OLD_TO_DELETE/ma-essentials/players
+      to: ma-essentials/players
+    - from: OLD_TO_DELETE/ma-essentials/warps
+      to: ma-essentials/warps
+    - from: OLD_TO_DELETE/ma-essentials/data.json
+      to: ma-essentials/data.json
+    - from: OLD_TO_DELETE/ma-essentials/kits.json
+      to: ma-essentials/kits.json
+    - from: OLD_TO_DELETE/ma-chat/chat.json
+      to: ma-chat/chat.json
+    - from: OLD_TO_DELETE/ma-chat/messages.json
+      to: ma-chat/messages.json
+    - from: OLD_TO_DELETE/ma-chat/motd.txt
+      to: ma-chat/motd.txt
+    - from: OLD_TO_DELETE/ma-chat/rules.json
+      to: ma-chat/rules.json
 
   # This makes the program check the folder for whether it is supposed to use the
   checkFolder: yes
@@ -173,9 +192,10 @@ launch:
 
   # Start File Name, variables: {{@loaderversion@}} and {{@mcversion@}}
   # This has to be the name the installer spits out
-  # For Forge 1.13: forge-{{@mcversion@}}-{{@loaderversion@}}-universal.jar
-  # For Fabric: fabric-server-launch.jar
-  startFile: forge-{{@mcversion@}}-{{@loaderversion@}}-universal.jar
+  # For Forge 1.12-: "forge-{{@mcversion@}}-{{@loaderversion@}}-universal.jar"
+  # For Forge 1.13+: "forge-{{@mcversion@}}-{{@loaderversion@}}.jar"
+  # For Fabric: "fabric-server-launch.jar"
+  startFile: forge-{{@mcversion@}}-{{@loaderversion@}}.jar
 
   # In case you have multiple javas installed you can add a absolute path to it here
   # if the value is "", null, or ~ then 'java' from PATH is going to be used
