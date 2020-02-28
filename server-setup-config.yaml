@@ -18,13 +18,13 @@ install:
 
   # exact version of forge or fabric that is supposed to be used
   # if this value is a null value so ( ~, null, or "" ) then the version from the mod pack is going to be used
-  loaderVersion: 0.5.2.39
+  loaderVersion: ~
 
   # If a custom installer is supposed to used, specify the url here: (Otherwise put "", ~ or null here)
   # supports variables: {{@loaderversion@}} and {{@mcversion@}}
   # For forge: "http://files.minecraftforge.net/maven/net/minecraftforge/forge/{{@mcversion@}}-{{@loaderversion@}}/forge-{{@mcversion@}}-{{@loaderversion@}}-installer.jar"
   # For Fabric: "https://maven.fabricmc.net/net/fabricmc/fabric-installer/{{@loaderversion@}}/fabric-installer-{{@loaderversion@}}.jar"
-  installerUrl: https://maven.fabricmc.net/net/fabricmc/fabric-installer/{{@loaderversion@}}/fabric-installer-{{@loaderversion@}}.jar
+  installerUrl: http://files.minecraftforge.net/maven/net/minecraftforge/forge/{{@mcversion@}}-{{@loaderversion@}}/forge-{{@mcversion@}}-{{@loaderversion@}}-installer.jar
 
   # Installer Arguments
   # These Arguments have to be passed to the installer
@@ -44,27 +44,60 @@ install:
   # installerArguments:
   #   - "--installServer"
   installerArguments:
-   - "server"
-   - "-downloadMinecraft"
+   - "--installServer"
 
   # Link to where the file where the modpack can be distributed
   # This supports loading from local files as well for most pack types if there is file://{PathToFile} in the beginning
-  modpackUrl: https://github.com/AllOfFabric/AOF-2/releases/download/2.3.0/AOF.2.v2.3.0.zip
+  modpackUrl: https://media.forgecdn.net/files/2886/693/RAM-0.2.4.zip
 
   # This is used to specify in which format the modpack is distributed, the server launcher has to handle each individually if their format differs
   # current supported formats:
   # - curseforge or curse
   # - curseid
   # - zip or zipfile
-  modpackFormat: zip
+  modpackFormat: curse
 
   # Settings which are specific to the format used, might not be needed in some casese
   formatSpecific:
     # optional paramenter used for curse to specify a whole project to ignore (mostly if it is client side only)
     ignoreProject:
-      - 333012 #missing bits
-      - 308793 #clear despawn
-      - 334360 #clippy tippies
+      - 60089
+      - 250398
+      - 267602
+      - 225928
+      - 226406
+      - 232131
+      - 231275
+      - 282743
+      - 265917
+      - 240630
+      - 238747
+      - 243478
+      - 291926
+      - 293496
+      - 226447
+      - 271740
+      - 237701
+      - 285492
+      - 272515
+      - 251407
+      - 253729
+      - 291727
+      - 283649
+      - 295765
+      - 285742
+      - 292992
+      - 241140
+      - 317642
+      - 231453
+      - 349206
+      - 353051
+      - 357540
+      - 300569
+      - 263420
+      - 317780
+      - 254758
+      - 358191
 
   # The base path where the server should be installed to, ~ for current path
   baseInstallPath: ~
@@ -82,18 +115,18 @@ install:
   additionalFiles:
     - url: https://media.forgecdn.net/files/2844/278/restrictedportals-1.15-1.0.jar
       destination: mods/restrictedportals-1.15-1.0.jar
-    - url: https://media.forgecdn.net/files/2874/966/Morpheus-1.15.2-4.2.46.jar
-      destination: mods/Morpheus-1.15.2-4.2.46.jar
+    - url: https://media.forgecdn.net/files/2881/522/Morpheus-1.15.2-4.2.47.jar
+      destination: mods/Morpheus-1.15.2-4.2.47.jar
     - url: https://media.forgecdn.net/files/2876/89/spark-forge.jar
       destination: mods/spark-forge.jar
 
   # For often there are config which the user wants to change, here is the place to put the local path to configs, jars or whatever
-  # You can copy files or folders
+  # You can copy files or folders:
+  #
+  #localFiles:
+  #  - from: setup/modpack-download.zip
+  #    to: setup/test/modpack-download-copied.zip
   localFiles:
-    - from: setup/modpack-download.zip
-      to: setup/test/modpack-download-copied.zip
-    - from: setup/AOF 2/.minecraft
-      to: setup/.
 
   # This makes the program check the folder for whether it is supposed to use the
   checkFolder: yes
@@ -142,7 +175,7 @@ launch:
   # This has to be the name the installer spits out
   # For Forge 1.13: forge-{{@mcversion@}}-{{@loaderversion@}}-universal.jar
   # For Fabric: fabric-server-launch.jar
-  startFile: fabric-server-launch.jar
+  startFile: forge-{{@mcversion@}}-{{@loaderversion@}}-universal.jar
 
   # In case you have multiple javas installed you can add a absolute path to it here
   # if the value is "", null, or ~ then 'java' from PATH is going to be used
