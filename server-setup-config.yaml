@@ -103,39 +103,45 @@ install:
   # This is a list of files, each ' - ' is a new file:
   # url is the directlink to the file, destination is the path to where the file should be copied to
   additionalFiles:
-    - url: https://media.forgecdn.net/files/2844/278/restrictedportals-1.15-1.0.jar
-      destination: mods/restrictedportals-1.15-1.0.jar
-    - url: https://media.forgecdn.net/files/2881/522/Morpheus-1.15.2-4.2.47.jar
-      destination: mods/Morpheus-1.15.2-4.2.47.jar
-    - url: https://media.forgecdn.net/files/2876/89/spark-forge.jar
-      destination: mods/spark-forge.jar
+    - url: https://media.forgecdn.net/files/3101/200/tellme-fabric-1.16.4-0.9.1-beta.1.jar
+      destination: mods/tellme-fabric-1.16.4-0.9.1-beta.1.jar
+    - url: https://media.forgecdn.net/files/3097/870/blocklogger-0.2.1.jar
+      destination: mods/blocklogger-0.2.1.jar
+#    - url: https://media.forgecdn.net/files/3072/467/BlueMap-1.2.0-snap-fabric-1.16.3.jar
+#      destination: mods/BlueMap-1.2.0-snap-fabric-1.16.3.jar
+    - url: https://media.forgecdn.net/files/3082/894/hypnos-0.1.1.jar
+      destination: mods/hypnos-0.1.1.jar
+    - url: https://media.forgecdn.net/files/3109/728/InvView-1.2.0-1.16.2%2B.jar
+      destination: mods/InvView-1.2.0-1.16.2%2B.jar
+    - url: https://media.forgecdn.net/files/3098/760/FabriKommander-1.0.0-MC1.16.3.jar
+      destination: mods/FabriKommander-1.0.0-MC1.16.3.jar
+#    - url: https://media.forgecdn.net/files/3104/633/flan-1.16.2-1.1.4.jar
+#      destination: mods/flan-1.16.2-1.1.4.jar
+    - url: https://ci.lucko.me/job/spark/lastSuccessfulBuild/artifact/spark-fabric/build/libs/spark-fabric.jar
+      destination: mods/spark-fabric.jar
+    - url: https://media.forgecdn.net/files/3115/560/disfabric-1.16.4-1.2.0.jar
+      destination: mods/disfabric-1.16.4-1.2.0.jar
+    - url: https://media.forgecdn.net/files/3009/753/shutupconsole-1.1.jar
+      destination: mods/shutupconsole-1.1.jar
+    - url: https://cdn.discordapp.com/attachments/750220836191076383/778900805402492958/advdebug-2.2.0.jar
+      destination: mods/advdebug-2.2.0.jar
 
   # For often there are config which the user wants to change, here is the place to put the local path to configs, jars or whatever
   # You can copy files or folders:
   #
   localFiles:
-    - from: OLD_TO_DELETE/config/minecraft2discord-common.toml
-      to: config/minecraft2discord-common.toml
-    - from: OLD_TO_DELETE/config/dcintegration-common.toml
-      to: config/dcintegration-common.toml
-    - from: OLD_TO_DELETE/ma-essentials/homes
-      to: ma-essentials/homes
-    - from: OLD_TO_DELETE/ma-essentials/players
-      to: ma-essentials/players
-    - from: OLD_TO_DELETE/ma-essentials/warps
-      to: ma-essentials/warps
-    - from: OLD_TO_DELETE/ma-essentials/data.json
-      to: ma-essentials/data.json
-    - from: OLD_TO_DELETE/ma-essentials/kits.json
-      to: ma-essentials/kits.json
-    - from: OLD_TO_DELETE/ma-chat/chat.json
-      to: ma-chat/chat.json
-    - from: OLD_TO_DELETE/ma-chat/messages.json
-      to: ma-chat/messages.json
-    - from: OLD_TO_DELETE/ma-chat/motd.txt
-      to: ma-chat/motd.txt
-    - from: OLD_TO_DELETE/ma-chat/rules.json
-      to: ma-chat/rules.json
+    - from: OLD_TO_DELETE/config/disfabric.json5
+      to: config/disfabric.json5
+    - from: OLD_TO_DELETE/config/charm.toml
+      to: config/charm.toml
+    - from: OLD_TO_DELETE/config/hypnos.json
+      to: config/hypnos.json
+    - from: OLD_TO_DELETE/config/shutupconsole.toml
+      to: config/shutupconsole.toml
+    - from: OLD_TO_DELETE/kubejs/server_scripts/custom.js
+      to: kubejs/server_scripts/custom.js
+    - from: OLD_TO_DELETE/config/indrev/cables.json
+      to: config/indrev/cables.json
 
   # This makes the program check the folder for whether it is supposed to use the
   checkFolder: yes
