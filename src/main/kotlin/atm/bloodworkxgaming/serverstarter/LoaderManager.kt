@@ -203,22 +203,8 @@ class LoaderManager(private val configFile: ConfigFile) {
             val java = if (configFile.launch.forcedJavaPath.isEmpty()) "java" else configFile.launch.forcedJavaPath
             arguments.add(java)
             arguments.addAll(configFile.launch.javaArgs)
+            arguments.add("-Xms${configFile.launch.minRam}")
             arguments.add("-Xmx${configFile.launch.maxRam}")
-
-            if (configFile.launch.javaArgs.none { it.trim().startsWith("-Xms") }) {
-                try {
-                    val xmx = Integer.parseInt(configFile.launch.maxRam.substring(0, configFile.launch.maxRam.length - 1))
-                    val xms = max(1, xmx / 2)
-                    val ending = configFile.launch.maxRam.substring(configFile.launch.maxRam.length - 1)
-                    arguments.add("-Xms$xms$ending")
-
-                } catch (e: NumberFormatException) {
-                    LOGGER.error("Problem while calculating XMS", e)
-                }
-
-            }
-
-
             arguments.addAll(arrayOf("-jar", launchJar.absolutePath, "nogui"))
 
             if (configFile.launch.ramDisk)
