@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'atm.bloodworkxgaming'
-version = '2.0.1'
+version = '2.1.0'
 
 sourceCompatibility = 1.8
 
@@ -64,7 +64,6 @@ tasks.build.dependsOn shadowJar
 task copyJar(type: Copy) {
     dependsOn build
 
-
     from file("$buildDir/libs/serverstarter-${version}.jar")
     into file("$buildDir/dist/serverstarter-$version/")
 }
@@ -76,8 +75,6 @@ task packageDist(type: Copy) {
     from file("src/main/resources/startserver.bat")
     from file("src/main/resources/startserver.sh")
     from file("server-setup-config.yaml")
-
-
     into file("$buildDir/dist/serverstarter-$version/")
 
     filter { it.replaceAll("@@serverstarter-libVersion@@", version as String) }
