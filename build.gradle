@@ -91,7 +91,7 @@ task zipDist (type: Zip) {
 
 githubRelease {
     token = getGithubKey()
-    owner = "AllTheMods"
+    owner = "Yoosk"
     repo = "ServerStarter"
 
     releaseAssets file("$buildDir/release/serverstarter-${version}.zip")
