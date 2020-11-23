@@ -171,10 +171,13 @@ launch:
   ramDisk: no
 
   # checks with the help of a few unrelated server whether the server is online
-  checkOffline: yes
+  checkOffline: no
 
   # specifies the max amount of ram the server is supposed to launch with
   maxRam: 5G
+
+   # specifies the minimal amount of ram the server is supposed to launch with
+  minRam: 5G
 
   # specifies whether the server is supposed to auto restart after crash
   autoRestart: yes
@@ -206,19 +209,25 @@ launch:
   # keep in mind java args often need ' - ' in front of it to work, use clarifying parentheses to make sure it uses it correctly
   # Keep in mind that some arguments only work on JRE 1.8
   javaArgs:
-    - "-d64"
-    - "-server"
-    - "-XX:+AggressiveOpts"
-    - "-XX:ParallelGCThreads=4"
-    - "-XX:+UseConcMarkSweepGC"
+    - "-XX:+UseG1GC"
+    - "-XX:+ParallelRefProcEnabled"
+    - "-XX:MaxGCPauseMillis=30"
     - "-XX:+UnlockExperimentalVMOptions"
-    - "-XX:+UseParNewGC"
-    - "-XX:+ExplicitGCInvokesConcurrent"
-    - "-XX:MaxGCPauseMillis=10"
-    - "-XX:GCPauseIntervalMillis=50"
-    - "-XX:+UseFastAccessorMethods"
-    - "-XX:+OptimizeStringConcat"
-    - "-XX:NewSize=84m"
-    - "-XX:+UseAdaptiveGCBoundary"
-    - "-XX:NewRatio=3"
-    - "-Dfml.readTimeout=90"
+    - "-XX:+DisableExplicitGC"
+    - "-XX:+AlwaysPreTouch"
+    - "-XX:G1NewSizePercent=30"
+    - "-XX:G1MaxNewSizePercent=40"
+    - "-XX:G1HeapRegionSize=8M"
+    - "-XX:G1ReservePercent=25"
+    - "-XX:G1HeapWastePercent=5"
+    - "-XX:G1MixedGCCountTarget=4"
+    - "-XX:InitiatingHeapOccupancyPercent=15"
+    - "-XX:G1MixedGCLiveThresholdPercent=90"
+    - "-XX:G1RSetUpdatingPauseTimePercent=5"
+    - "-XX:SurvivorRatio=32"
+    - "-XX:+PerfDisableSharedMem"
+    - "-XX:MaxTenuringThreshold=1"
+    - "-Dusing.aikars.flags=https://mcflags.emc.gs"
+    - "-Daikars.new.flags=true"
+    - "-XX:ConcGCThreads=3"
+    - "-XX:ParallelGCThreads=12"
