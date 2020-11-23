@@ -9,7 +9,7 @@ if [[ $(cat server-setup-config.yaml | grep 'ramDisk:' | awk 'BEGIN {FS=":"}{pri
 fi
 	if [ -f serverstarter-@@serverstarter-libVersion@@.jar ]; then
 			echo "Skipping download. Using existing serverstarter-@@serverstarter-libVersion@@.jar"
-         java -d64 -jar serverstarter-@@serverstarter-libVersion@@.jar
+         java -jar serverstarter-@@serverstarter-libVersion@@.jar
                if [[ $DO_RAMDISK -eq 1 ]]; then
                sudo umount $SAVE_DIR
                rm -rf $SAVE_DIR
@@ -17,7 +17,7 @@ fi
                fi
                exit 0
 	else
-			export URL="https://github.com/BloodyMods/ServerStarter/releases/download/v@@serverstarter-libVersion@@/serverstarter-@@serverstarter-libVersion@@.jar"
+			export URL="https://github.com/Yoosk/ServerStarter/releases/download/v@@serverstarter-libVersion@@/serverstarter-@@serverstarter-libVersion@@.jar"
 	fi
 		echo $URL
 		which wget >> /dev/null
@@ -33,7 +33,7 @@ fi
 				echo "Neither wget or curl were found on your system. Please install one and try again"
          fi
       fi
-java -d64 -jar serverstarter-@@serverstarter-libVersion@@.jar
+java -jar serverstarter-@@serverstarter-libVersion@@.jar
 if [[ $DO_RAMDISK -eq 1 ]]; then
     sudo umount $SAVE_DIR
     rm -rf $SAVE_DIR
