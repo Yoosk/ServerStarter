@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'atm.bloodworkxgaming'
-version = '1.2.6'
+version = '2.1.0'
 
 sourceCompatibility = 1.8
 
@@ -17,6 +17,12 @@ repositories {
         name = 'DVS1'
         url = 'http://dvs1.progwml6.com/files/maven'
     }
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 dependencies {
@@ -58,7 +64,6 @@ tasks.build.dependsOn shadowJar
 task copyJar(type: Copy) {
     dependsOn build
 
-
     from file("$buildDir/libs/serverstarter-${version}.jar")
     into file("$buildDir/dist/serverstarter-$version/")
 }
@@ -70,8 +75,6 @@ task packageDist(type: Copy) {
     from file("src/main/resources/startserver.bat")
     from file("src/main/resources/startserver.sh")
     from file("server-setup-config.yaml")
-
-
     into file("$buildDir/dist/serverstarter-$version/")
 
     filter { it.replaceAll("@@serverstarter-libVersion@@", version as String) }
@@ -91,7 +94,7 @@ task zipDist (type: Zip) {
 
 githubRelease {
     token = getGithubKey()
-    owner = "AllTheMods"
+    owner = "Yoosk"
     repo = "ServerStarter"
 
     releaseAssets file("$buildDir/release/serverstarter-${version}.zip")

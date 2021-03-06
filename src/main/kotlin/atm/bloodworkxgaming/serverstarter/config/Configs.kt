@@ -22,19 +22,25 @@ data class LaunchSettings(
         var ramDisk: Boolean = false,
         var checkOffline: Boolean = false,
         var maxRam: String = "",
+        var minRam: String = "",
 
+        var startFile: String = "",
         var javaArgs: List<String> = Collections.emptyList(),
         var autoRestart: Boolean = false,
         var crashLimit: Int = 0,
         var crashTimer: String = "",
-        var preJavaArgs: String = ""
+        var preJavaArgs: String = "",
+
+        var forcedJavaPath: String = ""
 )
 
 data class InstallConfig(
         var mcVersion: String = "",
 
-        var forgeVersion: String = "",
-        var forgeInstallerUrl: String = "",
+        var loaderVersion: String = "",
+        var installerUrl: String = "",
+        var installerArguments: List<String> = Collections.emptyList(),
+
         var modpackUrl: String = "",
         var modpackFormat: String = "",
         var formatSpecific: Map<String, Any> = Collections.emptyMap(),
@@ -45,7 +51,7 @@ data class InstallConfig(
         var localFiles: List<LocalFile> = Collections.emptyList(),
 
         var checkFolder: Boolean = false,
-        var installForge: Boolean = false,
+        var installLoader: Boolean = false,
 
         var spongeBootstrapper: String = "") {
 

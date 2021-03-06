@@ -15,8 +15,9 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
+import kotlin.math.max
 
-class ForgeManager(private val configFile: ConfigFile) {
+class LoaderManager(private val configFile: ConfigFile) {
 
     fun handleServer() {
         val startTimes = ArrayList<LocalDateTime>()
@@ -98,30 +99,35 @@ class ForgeManager(private val configFile: ConfigFile) {
 
     }
 
-    fun installForge(basePath: String, forgeVersion: String, mcVersion: String) {
-        val versionString = "$mcVersion-$forgeVersion"
-        val url = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/$versionString/forge-$versionString-installer.jar"
+    fun installLoader(basePath: String, loaderVersion: String, mcVersion: String) {
+        // val versionString = "$mcVersion-$forgeVersion"
+        // val url = "http://files.minecraftforge.net/maven/net/minecraftforge/forge/$versionString/forge-$versionString-installer.jar"
+        val url = configFile.install.installerUrl
+                .replace("{{@loaderversion@}}", loaderVersion)
+                .replace("{{@mcversion@}}", mcVersion)
         // http://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.3.2682/forge-1.12.2-14.23.3.2682-installer.jar
-        val installerPath = File(basePath + "forge-" + versionString + "-installer.jar")
+        //val installerPath = File(basePath + "forge-" + versionString + "-installer.jar")
+        val installerPath = File(basePath + "installer.jar")
 
 
         try {
-            LOGGER.info("Attempting to download forge installer from $url")
+            LOGGER.info("Attempting to download installer from $url")
             InternetManager.downloadToFile(url, installerPath)
 
-            LOGGER.info("Starting installation of Forge, installer output incoming")
+            LOGGER.info("Starting installation of Loader, installer output incoming")
             LOGGER.info("Check log for installer for more information", true)
-            val installer = ProcessBuilder("java", "-jar", installerPath.absolutePath, "--installServer")
+            val java = if (configFile.launch.forcedJavaPath.isEmpty()) "java" else configFile.launch.forcedJavaPath
+            val installer = ProcessBuilder(java, "-jar", installerPath.absolutePath, *configFile.install.installerArguments.toTypedArray())
                     .inheritIO()
                     .directory(File("$basePath."))
                     .start()
 
             installer.waitFor()
 
-            LOGGER.info("Done installing forge, deleting installer!")
+            LOGGER.info("Done installing loader, deleting installer!")
 
-            lockFile.forgeInstalled = true
-            lockFile.forgeVersion = forgeVersion
+            lockFile.loaderInstalled = true
+            lockFile.loaderVersion = loaderVersion
             lockFile.mcVersion = mcVersion
             ServerStarter.saveLockFile(lockFile)
 
@@ -131,9 +137,9 @@ class ForgeManager(private val configFile: ConfigFile) {
 
             checkEULA(basePath)
         } catch (e: IOException) {
-            LOGGER.error("Problem while installing Forge", e)
+            LOGGER.error("Problem while installing Loader", e)
         } catch (e: InterruptedException) {
-            LOGGER.error("Problem while installing Forge", e)
+            LOGGER.error("Problem while installing Loader", e)
         }
 
     }
@@ -165,15 +171,18 @@ class ForgeManager(private val configFile: ConfigFile) {
                 "world"
             }
 
-            var filename =
+            val filename =
                     if (configFile.launch.spongefix) {
                         lockFile.spongeBootstrapper
                     } else {
-                        "forge-${lockFile.mcVersion}-${lockFile.forgeVersion}-universal.jar"
+                        configFile.launch.startFile
+                                .replace("{{@loaderversion@}}", lockFile.loaderVersion)
+                                .replace("{{@mcversion@}}", lockFile.mcVersion)
+                        // "forge-${lockFile.mcVersion}-${lockFile.forgeVersion}-universal.jar"
                     }
-            if (!File(filename).exists()) {
-                filename = "forge-${lockFile.mcVersion}-${lockFile.forgeVersion}.jar"
-            }
+            /*if (!File(filename).exists()) {
+                filename = "forge-${lockFile.mcVersion}-${lockFile.loaderVersion}.jar"
+            }*/
 
             val launchJar = File(configFile.install.baseInstallPath + filename)
             val arguments = mutableListOf<String>()
@@ -191,24 +200,11 @@ class ForgeManager(private val configFile: ConfigFile) {
                 arguments.addAll(configFile.launch.preJavaArgs.trim().split(' ').dropWhile { it.isEmpty() })
             }
 
-            arguments.add("java")
+            val java = if (configFile.launch.forcedJavaPath.isEmpty()) "java" else configFile.launch.forcedJavaPath
+            arguments.add(java)
             arguments.addAll(configFile.launch.javaArgs)
+            arguments.add("-Xms${configFile.launch.minRam}")
             arguments.add("-Xmx${configFile.launch.maxRam}")
-
-            if (configFile.launch.javaArgs.none { it.trim().startsWith("-Xms") }) {
-                try {
-                    val xmx = Integer.parseInt(configFile.launch.maxRam.substring(0, configFile.launch.maxRam.length - 1))
-                    val xms = Math.max(1, xmx / 2)
-                    val ending = configFile.launch.maxRam.substring(configFile.launch.maxRam.length - 1)
-                    arguments.add("-Xms$xms$ending")
-
-                } catch (e: NumberFormatException) {
-                    LOGGER.error("Problem while calculating XMS", e)
-                }
-
-            }
-
-
             arguments.addAll(arrayOf("-jar", launchJar.absolutePath, "nogui"))
 
             if (configFile.launch.ramDisk)
@@ -222,45 +218,15 @@ class ForgeManager(private val configFile: ConfigFile) {
                 }
 
             LOGGER.info("Using arguments: $arguments", true)
-            LOGGER.info("Starting Forge, output incoming")
+            LOGGER.info("Starting Loader, output incoming")
             LOGGER.info("For output of this check the server log", true)
             if (configFile.launch.ramDisk)
-                ProcessBuilder(ramPreArguments).apply {
-                    inheritIO()
-                    directory(File(configFile.install.baseInstallPath + "."))
-                    start().apply {
-                        waitFor()
-                        outputStream.close()
-                        errorStream.close()
-                        inputStream.close()
-                    }
+                startAndWaitForProcess(ramPreArguments)
 
-                }
-
-            ProcessBuilder(arguments).apply {
-                inheritIO()
-                directory(File(configFile.install.baseInstallPath + "."))
-                start().apply {
-                    waitFor()
-                    outputStream.close()
-                    errorStream.close()
-                    inputStream.close()
-                }
-
-            }
+            startAndWaitForProcess(arguments)
 
             if (configFile.launch.ramDisk)
-                ProcessBuilder(ramPostArguments).apply {
-                    inheritIO()
-                    directory(File(configFile.install.baseInstallPath + "."))
-                    start().apply {
-                        waitFor()
-                        outputStream.close()
-                        errorStream.close()
-                        inputStream.close()
-                    }
-
-                }
+                startAndWaitForProcess(ramPostArguments)
 
         } catch (e: IOException) {
             LOGGER.error("Error while starting the server", e)
@@ -268,5 +234,18 @@ class ForgeManager(private val configFile: ConfigFile) {
             LOGGER.error("Error while starting the server", e)
         }
 
+    }
+
+    private fun startAndWaitForProcess(args: List<String>) {
+        ProcessBuilder(args).apply {
+            inheritIO()
+            directory(File(configFile.install.baseInstallPath + "."))
+            start().apply {
+                waitFor()
+                outputStream.close()
+                errorStream.close()
+                inputStream.close()
+            }
+        }
     }
 }
